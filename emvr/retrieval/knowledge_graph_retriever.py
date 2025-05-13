@@ -26,6 +26,7 @@ class KnowledgeGraphRetriever(BaseRetriever):
         Initialize the knowledge graph retriever.
 
         Args:
+        ----
             graph_store: Neo4j memory store
             include_text: Whether to include text in results
 
@@ -67,11 +68,13 @@ class KnowledgeGraphRetriever(BaseRetriever):
         Retrieve knowledge graph paths based on a query.
 
         Args:
+        ----
             query: Query string
             top_k: Number of results to return (used as a limit in Cypher)
             filters: Optional filters to apply (entity types, relation types)
 
         Returns:
+        -------
             List of retrieval results
 
         """
@@ -145,7 +148,7 @@ class KnowledgeGraphRetriever(BaseRetriever):
 
             # Execute custom Cypher query
             async with self.graph_store.driver.session(
-                database=self.graph_store.database
+                database=self.graph_store.database,
             ) as session:
                 result = await session.run(cypher_query, **cypher_params)
 
@@ -157,7 +160,9 @@ class KnowledgeGraphRetriever(BaseRetriever):
                     target = record["m"]
 
                     result_id = f"{source.id}-{relation.id}-{target.id}"
-                    result_text = f"{source['name']} --{relation['type']}--> {target['name']}"
+                    result_text = (
+                        f"{source['name']} --{relation['type']}--> {target['name']}"
+                    )
 
                     # Get observations for entities if available
                     source_obs_query = """
@@ -171,8 +176,14 @@ class KnowledgeGraphRetriever(BaseRetriever):
                     LIMIT 3
                     """
 
-                    source_obs_result = await session.run(source_obs_query, name=source["name"])
-                    target_obs_result = await session.run(target_obs_query, name=target["name"])
+                    source_obs_result = await session.run(
+                        source_obs_query,
+                        name=source["name"],
+                    )
+                    target_obs_result = await session.run(
+                        target_obs_query,
+                        name=target["name"],
+                    )
 
                     source_obs = []
                     async for obs_record in source_obs_result:
@@ -184,9 +195,13 @@ class KnowledgeGraphRetriever(BaseRetriever):
 
                     # Add observations to result text if available
                     if source_obs:
-                        result_text += f"\nSource ({source['name']}): {'; '.join(source_obs)}"
+                        result_text += (
+                            f"\nSource ({source['name']}): {'; '.join(source_obs)}"
+                        )
                     if target_obs:
-                        result_text += f"\nTarget ({target['name']}): {'; '.join(target_obs)}"
+                        result_text += (
+                            f"\nTarget ({target['name']}): {'; '.join(target_obs)}"
+                        )
 
                     # Create retrieval result
                     retrieval_results.append(

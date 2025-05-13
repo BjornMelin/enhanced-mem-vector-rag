@@ -108,10 +108,10 @@ dev = [
 "Homepage" = "https://github.com/bjorn/enhanced-mem-vector-rag"
 "Bug Tracker" = "https://github.com/bjorn/enhanced-mem-vector-rag/issues"
 
-# Use Ruff for formatting (replacing Black)
+# Use Ruff for formatting and linting
 [tool.ruff]
 # Common settings
-line-length = 100
+line-length = 88  # Updated to match Black's default for consistency
 target-version = "py311"
 
 # Formatter settings
@@ -123,7 +123,7 @@ line-ending = "auto"
 
 # Linter settings
 [tool.ruff.lint]
-# Simplified rule selection by categories
+# Comprehensive rule selection by categories
 select = [
     "E",   # pycodestyle errors
     "F",   # pyflakes
@@ -137,12 +137,22 @@ select = [
     "S",   # flake8-bandit
     "BLE", # flake8-blind-except
     "A",   # flake8-builtins
+    "COM", # flake8-commas
     "ERA", # eradicate
     "PD",  # pandas-vet
     "PL",  # pylint
     "RUF", # Ruff-specific
+    "NPY", # NumPy-specific rules
+    "PT",  # pytest-style
+    "Q",   # flake8-quotes
+    "SIM", # flake8-simplify
+    "TRY", # tryceratops
+    "ICN", # flake8-import-conventions
 ]
 ignore = ["D203", "D212", "ANN401", "PGH003", "ERA001"]
+# Allow autofix for all enabled rules (when `--fix`) is provided
+fixable = ["ALL"]
+unfixable = []
 
 # Import sorting configuration
 [tool.ruff.lint.isort]
@@ -152,6 +162,10 @@ section-order = ["future", "standard-library", "third-party", "first-party", "lo
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
 "tests/*" = ["S101", "ANN201", "PLR2004"]
+
+# Mccabe configuration (maximum cyclomatic complexity)
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 
 # Simplified mypy configuration
 [tool.mypy]

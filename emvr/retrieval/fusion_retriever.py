@@ -33,6 +33,7 @@ class FusionRetriever(BaseRetriever):
         Initialize the fusion retriever.
 
         Args:
+        ----
             vector_store: Vector store for semantic search
             graph_store: Graph store for knowledge graph queries
             vector_weight: Weight for vector search results (0.0-1.0)
@@ -79,11 +80,13 @@ class FusionRetriever(BaseRetriever):
         Retrieve documents using multiple retrieval methods.
 
         Args:
+        ----
             query: Query string
             top_k: Number of results to return
             filters: Optional filters to apply
 
         Returns:
+        -------
             List of retrieval results
 
         """
@@ -168,11 +171,13 @@ class FusionRetriever(BaseRetriever):
         Combine results from multiple sources with weights.
 
         Args:
+        ----
             query: Original query string
             source_results: Dictionary mapping source names to result lists
             top_k: Number of final results to return
 
         Returns:
+        -------
             Combined and reranked list of retrieval results
 
         """
@@ -226,7 +231,10 @@ class FusionRetriever(BaseRetriever):
                         existing.metadata["sources"].append("graph")
 
                     # Enhance text with graph information if not already included
-                    if "source_entity" in result.metadata and "relation" in result.metadata:
+                    if (
+                        "source_entity" in result.metadata
+                        and "relation" in result.metadata
+                    ):
                         source = result.metadata["source_entity"]
                         relation = result.metadata["relation"]
                         target = result.metadata["target_entity"]
@@ -262,7 +270,10 @@ class FusionRetriever(BaseRetriever):
 
         # Convert to list and sort by score
         combined_list = list(combined_dict.values())
-        combined_list.sort(key=lambda x: x.score if x.score is not None else 0, reverse=True)
+        combined_list.sort(
+            key=lambda x: x.score if x.score is not None else 0,
+            reverse=True,
+        )
 
         # Apply reranking if enabled
         if self.reranking:
@@ -283,10 +294,12 @@ class FusionRetriever(BaseRetriever):
         model (e.g., cross-encoder). This is a simplified version for demonstration.
 
         Args:
+        ----
             query: Original query string
             results: List of retrieval results to rerank
 
         Returns:
+        -------
             Reranked list of retrieval results
 
         """

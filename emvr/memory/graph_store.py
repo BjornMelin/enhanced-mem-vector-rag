@@ -4,6 +4,7 @@ import os
 from typing import Any
 
 from dotenv import load_dotenv
+
 # Temporarily comment out LlamaIndex import
 # from llama_index.core.graph_stores import Neo4jGraphStore
 from neo4j import AsyncGraphDatabase
@@ -28,6 +29,7 @@ class Neo4jMemoryStore:
         Initialize the Neo4j memory store.
 
         Args:
+        ----
             uri: URI of the Neo4j server (defaults to env var NEO4J_URI)
             username: Username for the Neo4j server (defaults to env var NEO4J_USERNAME)
             password: Password for the Neo4j server (defaults to env var NEO4J_PASSWORD)
@@ -58,9 +60,11 @@ class Neo4jMemoryStore:
         Create a new entity in the knowledge graph.
 
         Args:
+        ----
             entity: Entity to create
 
         Returns:
+        -------
             Created entity information
 
         """
@@ -93,9 +97,11 @@ class Neo4jMemoryStore:
         Create multiple new entities in the knowledge graph.
 
         Args:
+        ----
             entities: List of entities to create
 
         Returns:
+        -------
             Dictionary with created entities information
 
         """
@@ -111,9 +117,11 @@ class Neo4jMemoryStore:
         Create a new relation between entities in the knowledge graph.
 
         Args:
+        ----
             relation: Relation to create
 
         Returns:
+        -------
             Created relation information
 
         """
@@ -144,9 +152,11 @@ class Neo4jMemoryStore:
         Create multiple new relations between entities in the knowledge graph.
 
         Args:
+        ----
             relations: List of relations to create
 
         Returns:
+        -------
             Dictionary with created relations information
 
         """
@@ -162,6 +172,7 @@ class Neo4jMemoryStore:
         Add an observation to an entity.
 
         Args:
+        ----
             entity_name: Name of the entity
             observation: Observation text
 
@@ -188,10 +199,12 @@ class Neo4jMemoryStore:
         Add new observations to an existing entity in the knowledge graph.
 
         Args:
+        ----
             entity_name: Name of the entity
             observations: List of observation texts
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -208,9 +221,11 @@ class Neo4jMemoryStore:
         Delete multiple entities and their associated relations from the knowledge graph.
 
         Args:
+        ----
             entity_names: List of entity names to delete
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -240,10 +255,12 @@ class Neo4jMemoryStore:
         Delete specific observations from an entity in the knowledge graph.
 
         Args:
+        ----
             entity_name: Name of the entity
             observations: List of observation texts to delete
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -270,9 +287,11 @@ class Neo4jMemoryStore:
         Delete multiple relations from the knowledge graph.
 
         Args:
+        ----
             relations: List of relations to delete
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -307,7 +326,8 @@ class Neo4jMemoryStore:
         """
         Read the entire knowledge graph.
 
-        Returns:
+        Returns
+        -------
             Dictionary with entities and relations
 
         """
@@ -336,7 +356,7 @@ class Neo4jMemoryStore:
                         "name": record["name"],
                         "entity_type": record["entity_type"],
                         "observations": record["observations"],
-                    }
+                    },
                 )
 
             # Get relations
@@ -347,7 +367,7 @@ class Neo4jMemoryStore:
                         "from": record["from_entity"],
                         "relation": record["relation_type"],
                         "to": record["to_entity"],
-                    }
+                    },
                 )
 
         return {
@@ -360,9 +380,11 @@ class Neo4jMemoryStore:
         Search for nodes in the knowledge graph based on a query.
 
         Args:
+        ----
             query: Search query string
 
         Returns:
+        -------
             Dictionary with matching entities
 
         """
@@ -392,7 +414,7 @@ class Neo4jMemoryStore:
                         "entity_type": record["entity_type"],
                         "matching_observations": record["matching_observations"],
                         "all_observations": record["all_observations"],
-                    }
+                    },
                 )
 
         return {
@@ -405,9 +427,11 @@ class Neo4jMemoryStore:
         Open specific nodes in the knowledge graph by their names.
 
         Args:
+        ----
             names: List of entity names
 
         Returns:
+        -------
             Dictionary with matching entities
 
         """
@@ -432,7 +456,7 @@ class Neo4jMemoryStore:
                         "name": record["name"],
                         "entity_type": record["entity_type"],
                         "observations": record["observations"],
-                    }
+                    },
                 )
 
         return {

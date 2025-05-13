@@ -16,7 +16,9 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 # Security settings
 JWT_SECRET = os.getenv("JWT_SECRET", "your-jwt-secret-key")
-RBAC_CONFIG_PATH = Path(__file__).parent.parent.parent / "deployment" / "security" / "rbac.json"
+RBAC_CONFIG_PATH = (
+    Path(__file__).parent.parent.parent / "deployment" / "security" / "rbac.json"
+)
 
 
 # Load RBAC configuration
@@ -47,13 +49,17 @@ def get_user_permissions(user_id: str) -> set[str]:
     user_roles = user_config.get("roles", [])
 
     for role in user_roles:
-        role_permissions = rbac_config.get("roles", {}).get(role, {}).get("permissions", [])
+        role_permissions = (
+            rbac_config.get("roles", {}).get(role, {}).get("permissions", [])
+        )
         permissions.update(role_permissions)
 
     return permissions
 
 
-def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict[str, Any]:
+def verify_token(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+) -> dict[str, Any]:
     """Verify JWT token and return payload."""
     try:
         token = credentials.credentials
@@ -79,7 +85,7 @@ def check_permission(required_permission: str) -> Callable[[dict[str, Any]], Non
             return
 
         logger.warning(
-            f"User {user_id} attempted to access {required_permission} without permission"
+            f"User {user_id} attempted to access {required_permission} without permission",
         )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

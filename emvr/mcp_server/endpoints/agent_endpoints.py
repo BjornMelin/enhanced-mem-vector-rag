@@ -11,7 +11,7 @@ from typing import Annotated, Any
 from fastmcp import Context, MCPServer
 from pydantic import BaseModel, Field
 
-from emvr.agent.workflows import AgentWorkflowFactory
+from emvr.agents.orchestration import get_orchestrator
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -44,29 +44,22 @@ class WorkerRunRequest(BaseModel):
 
 async def register_agent_endpoints(mcp: MCPServer) -> None:
     """Register all agent MCP endpoints."""
-    # Agent workflow singleton
-    agent_workflow = None
-
-    def get_agent_workflow():
-        """Get or create the agent workflow."""
-        nonlocal agent_workflow
-        if agent_workflow is None:
-            agent_workflow = AgentWorkflowFactory.create_workflow()
-        return agent_workflow
-
     # ----- Agent Operations -----
 
     @mcp.tool()
     async def agent_run(
         query: Annotated[str, Field(description="The query to process")],
         thread_id: Annotated[
-            str | None, Field(description="Optional thread ID for conversation context")
+            str | None,
+            Field(description="Optional thread ID for conversation context"),
         ] = None,
         context: Annotated[
-            list[dict[str, Any]] | None, Field(description="Optional context for the agent")
+            list[dict[str, Any]] | None,
+            Field(description="Optional context for the agent"),
         ] = None,
         params: Annotated[
-            dict[str, Any] | None, Field(description="Optional parameters for the agent")
+            dict[str, Any] | None,
+            Field(description="Optional parameters for the agent"),
         ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -78,8 +71,16 @@ async def register_agent_endpoints(mcp: MCPServer) -> None:
         try:
             await ctx.info(f"Running agent workflow with query: {query}")
 
-            # Get the agent workflow
-            workflow = get_agent_workflow()
+            # Get the agent orchestrator
+            orchestrator = get_orchestrator()
+            if orchestrator is None:
+                return {
+                    "success": False,
+                    "output": "",
+                    "thread_id": thread_id or str(uuid.uuid4()),
+                    "error": "Agent orchestrator not initialized",
+                    "status": "error",
+                }
 
             # Process parameters
             thread_id = thread_id or str(uuid.uuid4())
@@ -89,19 +90,18 @@ async def register_agent_endpoints(mcp: MCPServer) -> None:
             workflow_params["thread_id"] = thread_id
 
             if context:
-                # TODO: Handle context integration
-                pass
+                workflow_params["context"] = context
 
             # Execute the workflow
-            result = await workflow.run(query, **workflow_params)
+            result = await orchestrator.run(query, **workflow_params)
 
             # Format response
             return {
-                "success": result.success,
-                "output": result.output,
+                "success": True,
+                "output": result.get("response", ""),
                 "thread_id": thread_id,
-                "error": result.error,
-                "status": "success" if result.success else "error",
+                "error": result.get("error"),
+                "status": "success" if not result.get("error") else "error",
             }
         except Exception as e:
             logger.exception(f"Agent workflow execution failed: {e}")
@@ -117,37 +117,41 @@ async def register_agent_endpoints(mcp: MCPServer) -> None:
 
     @mcp.tool()
     async def agent_run_worker(
-        worker_name: Annotated[str, Field(description="Name of the worker agent to run")],
+        worker_name: Annotated[
+            str,
+            Field(description="Name of the worker agent to run"),
+        ],
         query: Annotated[str, Field(description="The query to process")],
         thread_id: Annotated[
-            str | None, Field(description="Optional thread ID for conversation context")
+            str | None,
+            Field(description="Optional thread ID for conversation context"),
         ] = None,
         context: Annotated[
-            list[dict[str, Any]] | None, Field(description="Optional context for the agent")
+            list[dict[str, Any]] | None,
+            Field(description="Optional context for the agent"),
         ] = None,
         params: Annotated[
-            dict[str, Any] | None, Field(description="Optional parameters for the agent")
+            dict[str, Any] | None,
+            Field(description="Optional parameters for the agent"),
         ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
         """
         Run a specific worker agent on a query.
 
-        Each worker agent has a specialized capability (research, knowledge_graph, memory_management).
+        Each worker agent has a specialized capability (research, analysis, ingestion, creative).
         """
         try:
             await ctx.info(f"Running worker agent '{worker_name}' with query: {query}")
 
-            # Get the agent workflow
-            workflow = get_agent_workflow()
-
-            # Check if worker exists
-            if worker_name not in workflow.worker_agents:
+            # Get the agent orchestrator
+            orchestrator = get_orchestrator()
+            if orchestrator is None:
                 return {
                     "success": False,
                     "output": "",
                     "thread_id": thread_id or str(uuid.uuid4()),
-                    "error": f"Worker agent '{worker_name}' not found",
+                    "error": "Agent orchestrator not initialized",
                     "status": "error",
                 }
 
@@ -159,20 +163,18 @@ async def register_agent_endpoints(mcp: MCPServer) -> None:
             worker_params["thread_id"] = thread_id
 
             if context:
-                # TODO: Handle context integration
-                pass
+                worker_params["context"] = context
 
             # Execute the worker agent directly
-            worker_agent = workflow.worker_agents[worker_name]
-            result = await worker_agent.run(query, **worker_params)
+            result = await orchestrator.run_worker(worker_name, query, **worker_params)
 
             # Format response
             return {
-                "success": result.success,
-                "output": result.output,
+                "success": True,
+                "output": result.get("response", ""),
                 "thread_id": thread_id,
-                "error": result.error,
-                "status": "success" if result.success else "error",
+                "error": result.get("error"),
+                "status": "success" if not result.get("error") else "error",
             }
         except Exception as e:
             logger.exception(f"Worker agent execution failed: {e}")
@@ -228,30 +230,41 @@ async def register_agent_resources(mcp: MCPServer) -> None:
 
         ```python
         result = await agent.run_worker(
-            worker_name="research_agent",
+            worker_name="research",
             query="Find all information related to transformers architecture"
         )
         ```
 
-        ### Knowledge Graph Agent
+        ### Analysis Agent
 
-        Specializes in knowledge graph operations and queries:
+        Specializes in analytical tasks and data processing:
 
         ```python
         result = await agent.run_worker(
-            worker_name="knowledge_graph_agent",
-            query="What entities are related to LlamaIndex?"
+            worker_name="analysis",
+            query="Analyze this dataset and identify key patterns"
         )
         ```
 
-        ### Memory Management Agent
+        ### Ingestion Agent
 
-        Specializes in memory operations like entity creation and observation management:
+        Specializes in data ingestion and knowledge base management:
 
         ```python
         result = await agent.run_worker(
-            worker_name="memory_management_agent",
-            query="Create a new entity for the FastEmbed library"
+            worker_name="ingestion",
+            query="Process and index this technical paper about LLMs"
+        )
+        ```
+
+        ### Creative Agent
+
+        Specializes in creative tasks like content generation:
+
+        ```python
+        result = await agent.run_worker(
+            worker_name="creative",
+            query="Generate a summary of these research findings for a blog post"
         )
         ```
 

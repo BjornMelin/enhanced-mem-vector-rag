@@ -31,10 +31,12 @@ class UserProfile(BaseModel):
         Get a user preference.
 
         Args:
+        ----
             key: The preference key
             default: Default value if not found
 
         Returns:
+        -------
             The preference value
 
         """
@@ -45,6 +47,7 @@ class UserProfile(BaseModel):
         Set a user preference.
 
         Args:
+        ----
             key: The preference key
             value: The preference value
 
@@ -56,9 +59,11 @@ class UserProfile(BaseModel):
         Get an API key for a service.
 
         Args:
+        ----
             service: The service name
 
         Returns:
+        -------
             The API key if available
 
         """
@@ -69,6 +74,7 @@ class UserProfile(BaseModel):
         Set an API key for a service.
 
         Args:
+        ----
             service: The service name
             key: The API key
 
@@ -80,7 +86,8 @@ def get_current_user_profile() -> UserProfile | None:
     """
     Get the current user's profile.
 
-    Returns:
+    Returns
+    -------
         The user profile if available
 
     """
@@ -91,15 +98,20 @@ def get_current_user_profile() -> UserProfile | None:
     return UserProfile(**profile_data)
 
 
-async def create_user_profile(user_id: str, display_name: str | None = None) -> UserProfile:
+async def create_user_profile(
+    user_id: str,
+    display_name: str | None = None,
+) -> UserProfile:
     """
     Create a new user profile.
 
     Args:
+    ----
         user_id: The user ID
         display_name: Optional display name
 
     Returns:
+    -------
         The created user profile
 
     """
@@ -121,6 +133,7 @@ async def update_user_profile(profile: UserProfile) -> None:
     Update a user profile in the session.
 
     Args:
+    ----
         profile: The updated profile
 
     """

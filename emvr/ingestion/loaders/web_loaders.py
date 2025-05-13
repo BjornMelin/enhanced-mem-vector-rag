@@ -59,10 +59,12 @@ class WebLoader:
         Load content from a URL.
 
         Args:
+        ----
             url: The URL to load
             metadata: Optional metadata for the document
 
         Returns:
+        -------
             List[Dict]: List of document dictionaries with "text" and "metadata"
 
         """
@@ -86,7 +88,7 @@ class WebLoader:
                 {
                     "source": url,
                     "source_type": "web",
-                }
+                },
             )
 
             # Return as a list of documents (empty for now)
@@ -94,7 +96,7 @@ class WebLoader:
                 {
                     "text": f"Placeholder content for URL: {url}",
                     "metadata": doc_metadata,
-                }
+                },
             ]
 
             # TODO: Implement with LlamaIndex SimpleWebPageReader
@@ -122,10 +124,12 @@ class WebLoader:
         Load content from multiple URLs.
 
         Args:
+        ----
             urls: List of URLs to load
             metadata: Optional metadata for all documents
 
         Returns:
+        -------
             List[Dict]: List of document dictionaries with "text" and "metadata"
 
         """

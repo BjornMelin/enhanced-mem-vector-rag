@@ -1,7 +1,7 @@
 """Database connection management for the EMVR system."""
 
 import logging
-from typing import Dict, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -22,15 +22,18 @@ def close_connections() -> None:
     pass
 
 
-def get_connection(db_type: str) -> Dict[str, Any]:
+def get_connection(db_type: str) -> dict[str, Any]:
     """
     Get a database connection.
-    
+
     Args:
+    ----
         db_type: Type of database connection to get (e.g. "qdrant", "neo4j", "supabase")
-        
+
     Returns:
+    -------
         Database connection
+
     """
     logger.info(f"Getting {db_type} connection")
     # In the real implementation, this would return the appropriate connection

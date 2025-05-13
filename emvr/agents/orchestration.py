@@ -42,6 +42,7 @@ class AgentOrchestrator:
         Initialize the agent orchestrator.
 
         Args:
+        ----
             llm: Language model to use for all agents
             additional_tools: Additional tools to provide to agents
             custom_agents: Custom agent implementations to use
@@ -60,15 +61,18 @@ class AgentOrchestrator:
         logger.info("Agent orchestrator initialized with supervisor and workers")
 
     def _initialize_workers(
-        self, custom_agents: dict[str, BaseAgent] | None = None
+        self,
+        custom_agents: dict[str, BaseAgent] | None = None,
     ) -> dict[str, BaseAgent]:
         """
         Initialize the worker agents.
 
         Args:
+        ----
             custom_agents: Custom agent implementations to use
 
         Returns:
+        -------
             Dict of worker agents
 
         """
@@ -113,7 +117,8 @@ class AgentOrchestrator:
         """
         Initialize the supervisor agent.
 
-        Returns:
+        Returns
+        -------
             Supervisor agent
 
         """
@@ -129,10 +134,12 @@ class AgentOrchestrator:
         Run the agent system on the given input.
 
         Args:
+        ----
             input_text: Input text to process
             kwargs: Additional arguments
 
         Returns:
+        -------
             Dict containing the agent's response and any additional information
 
         """
@@ -149,16 +156,23 @@ class AgentOrchestrator:
                 "status": "error",
             }
 
-    async def run_worker(self, worker_name: str, input_text: str, **kwargs: Any) -> dict[str, Any]:
+    async def run_worker(
+        self,
+        worker_name: str,
+        input_text: str,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
         """
         Run a specific worker agent on the given input.
 
         Args:
+        ----
             worker_name: Name of the worker agent to run
             input_text: Input text to process
             kwargs: Additional arguments
 
         Returns:
+        -------
             Dict containing the agent's response and any additional information
 
         """
@@ -198,11 +212,13 @@ async def initialize_orchestration(
     Initialize the agent orchestration system.
 
     Args:
+    ----
         llm: Language model to use for all agents
         additional_tools: Additional tools to provide to agents
         custom_agents: Custom agent implementations to use
 
     Returns:
+    -------
         Agent orchestrator instance
 
     """
@@ -222,7 +238,8 @@ def get_orchestrator() -> AgentOrchestrator | None:
     """
     Get the global orchestrator instance.
 
-    Returns:
+    Returns
+    -------
         Agent orchestrator instance if initialized, None otherwise
 
     """

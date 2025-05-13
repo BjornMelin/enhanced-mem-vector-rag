@@ -23,15 +23,24 @@ class IngestTextInput(BaseModel):
     """Input schema for ingest_text tool."""
 
     content: str = Field(..., description="Text content to ingest")
-    metadata: dict[str, Any] | None = Field(None, description="Optional metadata for the text")
-    source_name: str | None = Field(None, description="Optional source name for the text")
+    metadata: dict[str, Any] | None = Field(
+        None,
+        description="Optional metadata for the text",
+    )
+    source_name: str | None = Field(
+        None,
+        description="Optional source name for the text",
+    )
 
 
 class IngestFileInput(BaseModel):
     """Input schema for ingest_file tool."""
 
     file_path: str = Field(..., description="Path to the file to ingest")
-    metadata: dict[str, Any] | None = Field(None, description="Optional metadata for the file")
+    metadata: dict[str, Any] | None = Field(
+        None,
+        description="Optional metadata for the file",
+    )
 
 
 class IngestUrlInput(BaseModel):
@@ -39,7 +48,8 @@ class IngestUrlInput(BaseModel):
 
     url: str = Field(..., description="URL to ingest")
     metadata: dict[str, Any] | None = Field(
-        None, description="Optional metadata for the URL content"
+        None,
+        description="Optional metadata for the URL content",
     )
 
 
@@ -48,10 +58,17 @@ class IngestDirectoryInput(BaseModel):
 
     directory_path: str = Field(..., description="Path to the directory to ingest")
     recursive: bool = Field(True, description="Whether to search subdirectories")
-    metadata: dict[str, Any] | None = Field(None, description="Optional metadata for all documents")
-    exclude_hidden: bool = Field(True, description="Whether to exclude hidden files/dirs")
+    metadata: dict[str, Any] | None = Field(
+        None,
+        description="Optional metadata for all documents",
+    )
+    exclude_hidden: bool = Field(
+        True,
+        description="Whether to exclude hidden files/dirs",
+    )
     file_extensions: list[str] | None = Field(
-        None, description="List of file extensions to include"
+        None,
+        description="List of file extensions to include",
     )
 
 
@@ -68,11 +85,13 @@ async def ingest_text(
     Ingest raw text into the memory system.
 
     Args:
+    ----
         content: Text content to ingest
         metadata: Optional metadata for the text
         source_name: Optional source name for the text
 
     Returns:
+    -------
         Dict containing the result of the ingestion
 
     """
@@ -110,10 +129,12 @@ async def ingest_file(
     Ingest a file into the memory system.
 
     Args:
+    ----
         file_path: Path to the file to ingest
         metadata: Optional metadata for the file
 
     Returns:
+    -------
         Dict containing the result of the ingestion
 
     """
@@ -150,10 +171,12 @@ async def ingest_url(
     Ingest content from a URL into the memory system.
 
     Args:
+    ----
         url: URL to ingest
         metadata: Optional metadata for the URL content
 
     Returns:
+    -------
         Dict containing the result of the ingestion
 
     """
@@ -193,6 +216,7 @@ async def ingest_directory(
     Ingest all files from a directory into the memory system.
 
     Args:
+    ----
         directory_path: Path to the directory to ingest
         recursive: Whether to search subdirectories
         metadata: Optional metadata for all documents
@@ -200,6 +224,7 @@ async def ingest_directory(
         file_extensions: List of file extensions to include
 
     Returns:
+    -------
         Dict containing the result of the ingestion
 
     """
@@ -238,7 +263,8 @@ def get_ingestion_tools() -> list[BaseTool]:
     """
     Get all ingestion tools.
 
-    Returns:
+    Returns
+    -------
         List of ingestion tools
 
     """

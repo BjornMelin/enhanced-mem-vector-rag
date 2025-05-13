@@ -41,6 +41,7 @@ class BaseAgent(ABC):
         Initialize the base agent.
 
         Args:
+        ----
             name: Agent name
             description: Agent description
             llm: Language model to use
@@ -77,7 +78,7 @@ class BaseAgent(ABC):
                 MessagesPlaceholder(variable_name="chat_history"),
                 HumanMessage(content="{input}"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
-            ]
+            ],
         )
 
         # Create the agent
@@ -102,6 +103,7 @@ class BaseAgent(ABC):
         Add a tool to the agent.
 
         Args:
+        ----
             tool: Tool to add
 
         """
@@ -113,6 +115,7 @@ class BaseAgent(ABC):
         Add multiple tools to the agent.
 
         Args:
+        ----
             tools: List of tools to add
 
         """
@@ -125,10 +128,12 @@ class BaseAgent(ABC):
         Run the agent on the given input.
 
         Args:
+        ----
             input_text: Input text to process
             kwargs: Additional arguments
 
         Returns:
+        -------
             Dict containing the agent's response and any additional information
 
         """
@@ -147,10 +152,12 @@ class SimpleAgent(BaseAgent):
         Run the agent on the given input.
 
         Args:
+        ----
             input_text: Input text to process
             kwargs: Additional arguments
 
         Returns:
+        -------
             Dict containing the agent's response and any additional information
 
         """
@@ -163,7 +170,7 @@ class SimpleAgent(BaseAgent):
                 {
                     "input": input_text,
                     "chat_history": chat_history,
-                }
+                },
             )
 
             # Return the result

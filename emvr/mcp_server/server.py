@@ -23,7 +23,7 @@ from emvr.mcp_server.endpoints.agent_endpoints import (
     register_agent_resources,
 )
 from emvr.memory.memory_manager import memory_manager
-from emvr.retrievers.retrieval_pipeline import retrieval_pipeline
+from emvr.retrieval.pipeline import retrieval_pipeline
 
 # Configure logging
 logging.basicConfig(
@@ -126,6 +126,7 @@ class MemoryMCPServer:
         Run the server in HTTP mode.
 
         Args:
+        ----
             host: Host to bind to (defaults to settings)
             port: Port to bind to (defaults to settings)
 

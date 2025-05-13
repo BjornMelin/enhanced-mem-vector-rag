@@ -83,7 +83,10 @@ async def register_endpoints(mcp: MCPServer) -> None:
 
     @mcp.tool()
     async def memory_create_entities(
-        entities: Annotated[list[dict[str, Any]], Field(description="List of entities to create")],
+        entities: Annotated[
+            list[dict[str, Any]],
+            Field(description="List of entities to create"),
+        ],
         ctx: Context = None,
     ) -> dict[str, Any]:
         """
@@ -108,7 +111,8 @@ async def register_endpoints(mcp: MCPServer) -> None:
     @mcp.tool()
     async def memory_create_relations(
         relations: Annotated[
-            list[dict[str, Any]], Field(description="List of relations to create")
+            list[dict[str, Any]],
+            Field(description="List of relations to create"),
         ],
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -134,7 +138,8 @@ async def register_endpoints(mcp: MCPServer) -> None:
     @mcp.tool()
     async def memory_add_observations(
         observations: Annotated[
-            list[dict[str, Any]], Field(description="List of observations to add")
+            list[dict[str, Any]],
+            Field(description="List of observations to add"),
         ],
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -160,7 +165,10 @@ async def register_endpoints(mcp: MCPServer) -> None:
     @mcp.tool()
     async def memory_search_nodes(
         query: Annotated[str, Field(description="The search query string")],
-        limit: Annotated[int, Field(description="Maximum number of results to return")] = 10,
+        limit: Annotated[
+            int,
+            Field(description="Maximum number of results to return"),
+        ] = 10,
         ctx: Context = None,
     ) -> dict[str, Any]:
         """
@@ -207,7 +215,10 @@ async def register_endpoints(mcp: MCPServer) -> None:
 
     @mcp.tool()
     async def memory_delete_entities(
-        entityNames: Annotated[list[str], Field(description="List of entity names to delete")],
+        entityNames: Annotated[
+            list[str],
+            Field(description="List of entity names to delete"),
+        ],
         ctx: Context = None,
     ) -> dict[str, Any]:
         """
@@ -234,7 +245,10 @@ async def register_endpoints(mcp: MCPServer) -> None:
     @mcp.tool()
     async def search_hybrid(
         query: Annotated[str, Field(description="The search query string")],
-        limit: Annotated[int, Field(description="Maximum number of results to return")] = 10,
+        limit: Annotated[
+            int,
+            Field(description="Maximum number of results to return"),
+        ] = 10,
         ctx: Context = None,
     ) -> dict[str, Any]:
         """
@@ -263,7 +277,10 @@ async def register_endpoints(mcp: MCPServer) -> None:
     @mcp.tool()
     async def graph_query(
         query: Annotated[str, Field(description="The Cypher query to execute")],
-        parameters: Annotated[dict[str, Any] | None, Field(description="Query parameters")] = None,
+        parameters: Annotated[
+            dict[str, Any] | None,
+            Field(description="Query parameters"),
+        ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
         """
@@ -291,10 +308,12 @@ async def register_endpoints(mcp: MCPServer) -> None:
     async def ingest_text(
         content: Annotated[str, Field(description="Text content to ingest")],
         metadata: Annotated[
-            dict[str, Any] | None, Field(description="Optional metadata for the text")
+            dict[str, Any] | None,
+            Field(description="Optional metadata for the text"),
         ] = None,
         source_name: Annotated[
-            str | None, Field(description="Optional source name for the text")
+            str | None,
+            Field(description="Optional source name for the text"),
         ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -322,7 +341,8 @@ async def register_endpoints(mcp: MCPServer) -> None:
     async def ingest_file(
         file_path: Annotated[str, Field(description="Path to the file to ingest")],
         metadata: Annotated[
-            dict[str, Any] | None, Field(description="Optional metadata for the file")
+            dict[str, Any] | None,
+            Field(description="Optional metadata for the file"),
         ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -350,7 +370,8 @@ async def register_endpoints(mcp: MCPServer) -> None:
     async def ingest_url(
         url: Annotated[str, Field(description="URL to ingest")],
         metadata: Annotated[
-            dict[str, Any] | None, Field(description="Optional metadata for the URL content")
+            dict[str, Any] | None,
+            Field(description="Optional metadata for the URL content"),
         ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -375,16 +396,25 @@ async def register_endpoints(mcp: MCPServer) -> None:
 
     @mcp.tool()
     async def ingest_directory(
-        directory_path: Annotated[str, Field(description="Path to the directory to ingest")],
-        recursive: Annotated[bool, Field(description="Whether to search subdirectories")] = True,
+        directory_path: Annotated[
+            str,
+            Field(description="Path to the directory to ingest"),
+        ],
+        recursive: Annotated[
+            bool,
+            Field(description="Whether to search subdirectories"),
+        ] = True,
         metadata: Annotated[
-            dict[str, Any] | None, Field(description="Optional metadata for all documents")
+            dict[str, Any] | None,
+            Field(description="Optional metadata for all documents"),
         ] = None,
         exclude_hidden: Annotated[
-            bool, Field(description="Whether to exclude hidden files/dirs")
+            bool,
+            Field(description="Whether to exclude hidden files/dirs"),
         ] = True,
         file_extensions: Annotated[
-            list[str] | None, Field(description="List of file extensions to include")
+            list[str] | None,
+            Field(description="List of file extensions to include"),
         ] = None,
         ctx: Context = None,
     ) -> dict[str, Any]:
@@ -394,7 +424,9 @@ async def register_endpoints(mcp: MCPServer) -> None:
         Recursively processes all files from the directory through the ingestion pipeline.
         """
         try:
-            await ctx.info(f"Ingesting directory: {directory_path} (recursive={recursive})")
+            await ctx.info(
+                f"Ingesting directory: {directory_path} (recursive={recursive})",
+            )
 
             # Initialize ingestion pipeline
             await ingestion_pipeline.initialize()

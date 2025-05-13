@@ -9,7 +9,7 @@ from typing import Any
 
 import chainlit as cl
 
-from emvr.retrievers.retrieval_pipeline import retrieval_pipeline
+from emvr.retrieval.pipeline import retrieval_pipeline
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -28,12 +28,14 @@ async def perform_search(
     Perform a search.
 
     Args:
+    ----
         query: The search query
         search_type: The type of search (hybrid, vector, graph)
         limit: Maximum number of results to return
         rerank: Whether to rerank results
 
     Returns:
+    -------
         Search results
 
     """
@@ -86,12 +88,14 @@ async def retrieve_and_generate(
     Retrieve information and generate a response.
 
     Args:
+    ----
         query: The search query
         limit: Maximum number of search results
         context_limit: Maximum number of context documents to include
         rerank: Whether to rerank results
 
     Returns:
+    -------
         Response and context
 
     """
@@ -175,6 +179,7 @@ async def display_search_results(
     Display search results in the UI.
 
     Args:
+    ----
         results: Search results
         query: The search query
         search_type: The type of search performed
@@ -195,12 +200,16 @@ async def display_search_results(
             f"**Score:** {result.get('score', 0):.4f}\n"
             f"**Content:**\n{result.get('content', 'No content available')}"
             for i, result in enumerate(results[:10])
-        ]
+        ],
     )
 
     # Create result message with elements
     elements = [
-        cl.Text(name="filter", label="Filter Results", placeholder="Filter by keyword..."),
+        cl.Text(
+            name="filter",
+            label="Filter Results",
+            placeholder="Filter by keyword...",
+        ),
         cl.Select(
             name="sort",
             label="Sort By",

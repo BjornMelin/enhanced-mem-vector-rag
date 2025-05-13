@@ -21,6 +21,7 @@ async def register_ingestion_endpoints(mcp_server: MCPServer) -> None:
     Register ingestion endpoints with the MCP server.
 
     Args:
+    ----
         mcp_server: MCP server instance
 
     """
@@ -92,11 +93,13 @@ async def ingest_text(
     Ingest text content into the memory system.
 
     Args:
+    ----
         content: Text content to ingest
         metadata: Optional metadata for the content
         document_id: Optional document ID
 
     Returns:
+    -------
         Dictionary with ingestion result
 
     """
@@ -128,10 +131,12 @@ async def ingest_url(
     Ingest content from a URL into the memory system.
 
     Args:
+    ----
         url: URL to ingest
         metadata: Optional metadata for the content
 
     Returns:
+    -------
         Dictionary with ingestion result
 
     """
@@ -163,10 +168,12 @@ async def ingest_file(
     Ingest a file into the memory system.
 
     Args:
+    ----
         file_path: Path to the file
         metadata: Optional metadata for the file
 
     Returns:
+    -------
         Dictionary with ingestion result
 
     """
@@ -204,9 +211,11 @@ async def delete_document(
     Delete documents from the memory system.
 
     Args:
+    ----
         document_ids: List of document IDs to delete
 
     Returns:
+    -------
         Dictionary with deletion result
 
     """

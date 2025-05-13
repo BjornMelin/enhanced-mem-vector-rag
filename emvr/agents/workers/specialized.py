@@ -37,6 +37,7 @@ class ResearchAgent(WorkerAgent):
         Initialize the research agent.
 
         Args:
+        ----
             llm: Language model to use
             additional_tools: Additional tools for the agent
             system_prompt: System prompt for the agent
@@ -91,6 +92,7 @@ class IngestionAgent(WorkerAgent):
         Initialize the ingestion agent.
 
         Args:
+        ----
             llm: Language model to use
             additional_tools: Additional tools for the agent
             system_prompt: System prompt for the agent
@@ -145,6 +147,7 @@ class AnalysisAgent(WorkerAgent):
         Initialize the analysis agent.
 
         Args:
+        ----
             llm: Language model to use
             additional_tools: Additional tools for the agent
             system_prompt: System prompt for the agent
@@ -200,6 +203,7 @@ class CreativeAgent(WorkerAgent):
         Initialize the creative agent.
 
         Args:
+        ----
             llm: Language model to use
             additional_tools: Additional tools for the agent
             system_prompt: System prompt for the agent

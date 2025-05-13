@@ -28,11 +28,13 @@ async def prepare_graph_data(
     Prepare graph data for visualization.
 
     Args:
+    ----
         center_entity: Optional center entity name
         max_nodes: Maximum number of nodes to include
         max_depth: Maximum relationship depth
 
     Returns:
+    -------
         Graph data structure for visualization
 
     """
@@ -79,7 +81,7 @@ async def prepare_graph_data(
                         "type": node.get("entityType", "Entity"),
                         "observations": node.get("observations", []),
                     },
-                }
+                },
             )
 
         # Process relationships
@@ -93,7 +95,7 @@ async def prepare_graph_data(
                     "properties": {
                         "type": rel.get("relationType", "related"),
                     },
-                }
+                },
             )
 
         return {
@@ -124,6 +126,7 @@ async def show_graph_visualization(
     Show the knowledge graph visualization.
 
     Args:
+    ----
         center_entity: Optional center entity name
         max_nodes: Maximum number of nodes to include
         max_depth: Maximum relationship depth

@@ -21,6 +21,7 @@ async def register_all_endpoints(mcp_server: MCPServer) -> None:
     Register all endpoints with the MCP server.
 
     Args:
+    ----
         mcp_server: MCP server instance
 
     """
@@ -51,6 +52,7 @@ async def register_memory_endpoints(mcp_server: MCPServer) -> None:
     Register memory endpoints with the MCP server.
 
     Args:
+    ----
         mcp_server: MCP server instance
 
     """

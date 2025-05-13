@@ -65,9 +65,11 @@ async def process_file_upload(file: FileDict) -> tuple[bool, str, dict[str, Any]
     Process an uploaded file.
 
     Args:
+    ----
         file: The uploaded file
 
     Returns:
+    -------
         Tuple of (success, message, result)
 
     """
@@ -123,7 +125,9 @@ async def process_file_upload(file: FileDict) -> tuple[bool, str, dict[str, Any]
                 f"({result.get('chunks', 0)} chunks created)"
             )
             return (True, success_message, result)
-        error_message = f"Failed to process file: {result.get('error', 'Unknown error')}"
+        error_message = (
+            f"Failed to process file: {result.get('error', 'Unknown error')}"
+        )
         return (False, error_message, result)
 
     except Exception as e:

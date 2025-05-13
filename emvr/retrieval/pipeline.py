@@ -34,6 +34,7 @@ class RetrievalPipeline:
         Initialize the retrieval pipeline.
 
         Args:
+        ----
             vector_store: Vector store for semantic search
             graph_store: Graph store for knowledge graph queries
             memory_manager: Memory manager instance
@@ -59,20 +60,20 @@ class RetrievalPipeline:
 
         # Track active retriever
         self._active_retriever = None
-        
+
         # Initialization status
         self._initialized = False
-        
+
     async def initialize(self) -> None:
         """Initialize the retrieval pipeline."""
         if self._initialized:
             return
-            
+
         logger.info("Initializing retrieval pipeline")
-        
+
         # In a real implementation, this would initialize the vector store
         # and any other needed components
-        
+
         self._initialized = True
         logger.info("Retrieval pipeline initialized")
 
@@ -139,9 +140,11 @@ class RetrievalPipeline:
         Set the retrieval mode.
 
         Args:
+        ----
             mode: Retrieval mode ("vector", "graph", "hybrid", "fusion")
 
         Raises:
+        ------
             ValueError: If the mode is invalid
 
         """
@@ -166,12 +169,14 @@ class RetrievalPipeline:
         Retrieve documents based on a query.
 
         Args:
+        ----
             query: Query string
             top_k: Number of results to return
             filters: Optional filters to apply
             mode: Override the retrieval mode for this query
 
         Returns:
+        -------
             Dictionary with retrieval results and metadata
 
         """
@@ -229,11 +234,13 @@ class RetrievalPipeline:
         This is a convenience method for the MCP server.
 
         Args:
+        ----
             query: Query string
             top_k: Number of results to return
             filters: Optional filters to apply
 
         Returns:
+        -------
             Dictionary with search results
 
         """
@@ -254,11 +261,13 @@ class RetrievalPipeline:
         Enrich context with retrieved information.
 
         Args:
+        ----
             query: Query string
             context: Optional existing context to enrich
             top_k: Number of results to include
 
         Returns:
+        -------
             Dictionary with enriched context
 
         """

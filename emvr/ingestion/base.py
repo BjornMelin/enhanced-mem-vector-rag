@@ -32,9 +32,11 @@ class BaseIngestionConnector(ABC):
         Ingest documents into the system.
 
         Args:
+        ----
             documents: List of documents to ingest
 
         Returns:
+        -------
             List of ingestion results
 
         """
@@ -45,9 +47,11 @@ class BaseIngestionConnector(ABC):
         Delete documents from the system.
 
         Args:
+        ----
             document_ids: List of document IDs to delete
 
         Returns:
+        -------
             List of deletion results
 
         """

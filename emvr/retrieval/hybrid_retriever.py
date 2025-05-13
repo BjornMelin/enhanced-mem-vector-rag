@@ -27,6 +27,7 @@ class HybridRetriever(BaseRetriever):
         Initialize the hybrid retriever.
 
         Args:
+        ----
             vector_store: Vector store for retrieval
             embedding_model: Embedding model to use for encoding queries
             use_reranking: Whether to use reranking on results
@@ -67,11 +68,13 @@ class HybridRetriever(BaseRetriever):
         Retrieve documents based on a query.
 
         Args:
+        ----
             query: Query string
             top_k: Number of results to return
             filters: Optional filters to apply
 
         Returns:
+        -------
             List of retrieval results
 
         """
@@ -118,11 +121,13 @@ class HybridRetriever(BaseRetriever):
         reranker model. For simplicity, we're using a basic relevance score.
 
         Args:
+        ----
             query: Query string
             nodes: List of nodes with scores
             top_k: Number of results to return
 
         Returns:
+        -------
             Reranked list of nodes
 
         """
@@ -142,6 +147,10 @@ class HybridRetriever(BaseRetriever):
                 node.score = (node.score * 0.5) + boost
 
         # Sort by adjusted score
-        reranked_nodes = sorted(nodes, key=lambda x: getattr(x, "score", 0.0), reverse=True)
+        reranked_nodes = sorted(
+            nodes,
+            key=lambda x: getattr(x, "score", 0.0),
+            reverse=True,
+        )
 
         return reranked_nodes[:top_k]

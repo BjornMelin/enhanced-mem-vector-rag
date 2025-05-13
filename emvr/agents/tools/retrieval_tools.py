@@ -10,7 +10,7 @@ from typing import Any
 from langchain.tools import BaseTool, tool
 from pydantic import BaseModel, Field
 
-from emvr.retrievers.retrieval_pipeline import retrieval_pipeline
+from emvr.retrieval.pipeline import retrieval_pipeline
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -32,7 +32,10 @@ class RetrieveAndGenerateInput(BaseModel):
 
     query: str = Field(..., description="The search query string")
     limit: int = Field(10, description="Maximum number of results to return")
-    context_limit: int = Field(5, description="Maximum number of context documents to include")
+    context_limit: int = Field(
+        5,
+        description="Maximum number of context documents to include",
+    )
     rerank: bool = Field(True, description="Whether to rerank results")
 
 
@@ -49,11 +52,13 @@ async def hybrid_search(
     Perform a hybrid search across vector and graph stores.
 
     Args:
+    ----
         query: The search query string
         limit: Maximum number of results to return
         rerank: Whether to rerank results
 
     Returns:
+    -------
         Dict containing search results
 
     """
@@ -89,10 +94,12 @@ async def vector_search(
     Perform a vector search using embeddings.
 
     Args:
+    ----
         query: The search query string
         limit: Maximum number of results to return
 
     Returns:
+    -------
         Dict containing search results
 
     """
@@ -127,10 +134,12 @@ async def graph_search(
     Perform a graph search using knowledge graph.
 
     Args:
+    ----
         query: The search query string
         limit: Maximum number of results to return
 
     Returns:
+    -------
         Dict containing search results
 
     """
@@ -167,12 +176,14 @@ async def retrieve_and_generate(
     Retrieve information and generate a response.
 
     Args:
+    ----
         query: The search query string
         limit: Maximum number of results to return
         context_limit: Maximum number of context documents to include
         rerank: Whether to rerank results
 
     Returns:
+    -------
         Dict containing the generated response and retrieved context
 
     """
@@ -211,10 +222,12 @@ async def find_entities(
     Extract entities from text and find them in the knowledge graph.
 
     Args:
+    ----
         query: The text to extract entities from
         limit: Maximum number of entities to return
 
     Returns:
+    -------
         Dict containing the found entities
 
     """
@@ -251,12 +264,14 @@ async def find_relationships(
     Find relationships for an entity in the knowledge graph.
 
     Args:
+    ----
         entity_name: The name of the entity to find relationships for
         relation_type: Optional type of relation to filter by
         direction: Direction of relationships ("outgoing", "incoming", or "both")
         limit: Maximum number of relationships to return
 
     Returns:
+    -------
         Dict containing the found relationships
 
     """
@@ -291,7 +306,8 @@ def get_retrieval_tools() -> list[BaseTool]:
     """
     Get all retrieval tools.
 
-    Returns:
+    Returns
+    -------
         List of retrieval tools
 
     """

@@ -27,6 +27,7 @@ def run_chainlit(
     Run the Chainlit UI application.
 
     Args:
+    ----
         host: Host to bind to
         port: Port to bind to
         debug: Whether to run in debug mode
@@ -43,7 +44,7 @@ def run_chainlit(
 
         # Set development mode for testing
         env["EMVR_DEVELOPMENT"] = "true"
-        
+
         if debug:
             env["CHAINLIT_DEBUG"] = "true"
             # Enable more verbose logging in debug mode
@@ -58,7 +59,7 @@ def run_chainlit(
             "ui",
             "app.py",
         )
-        
+
         # Verify app path exists
         if not os.path.exists(app_path):
             logger.error(f"Chainlit app not found at {app_path}")
@@ -67,6 +68,7 @@ def run_chainlit(
         # Verify chainlit is installed
         try:
             import chainlit
+
             logger.info(f"Using Chainlit version: {chainlit.__version__}")
         except ImportError:
             logger.error("Chainlit not installed. Run: pip install chainlit==2.5.5")
@@ -89,20 +91,20 @@ def run_chainlit(
         # Run Chainlit
         logger.info("Starting Chainlit UI on %s:%s", host, port)
         logger.info("Development mode enabled - using mock components where needed")
-        
+
         result = subprocess.run(
-            cmd, 
-            env=env, 
-            cwd=str(project_root), 
+            cmd,
+            env=env,
+            cwd=str(project_root),
             check=False,
-            capture_output=debug  # Capture output in debug mode
+            capture_output=debug,  # Capture output in debug mode
         )
-        
+
         if result.returncode != 0:
             logger.error(f"Chainlit exited with code {result.returncode}")
             if debug and result.stderr:
                 logger.error(f"Error output: {result.stderr.decode('utf-8')}")
-            
+
             raise RuntimeError(f"Chainlit failed with exit code {result.returncode}")
 
     except Exception as e:

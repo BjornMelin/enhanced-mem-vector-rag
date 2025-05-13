@@ -29,19 +29,28 @@ class SearchNodesInput(BaseModel):
 class CreateEntitiesInput(BaseModel):
     """Input schema for create_entities tool."""
 
-    entities: list[dict[str, Any]] = Field(..., description="List of entities to create")
+    entities: list[dict[str, Any]] = Field(
+        ...,
+        description="List of entities to create",
+    )
 
 
 class CreateRelationsInput(BaseModel):
     """Input schema for create_relations tool."""
 
-    relations: list[dict[str, Any]] = Field(..., description="List of relations to create")
+    relations: list[dict[str, Any]] = Field(
+        ...,
+        description="List of relations to create",
+    )
 
 
 class AddObservationsInput(BaseModel):
     """Input schema for add_observations tool."""
 
-    observations: list[dict[str, Any]] = Field(..., description="List of observations to add")
+    observations: list[dict[str, Any]] = Field(
+        ...,
+        description="List of observations to add",
+    )
 
 
 class DeleteEntitiesInput(BaseModel):
@@ -62,10 +71,12 @@ async def search_memory(
     Search the memory system for nodes matching the query.
 
     Args:
+    ----
         query: The search query string
         limit: Maximum number of results to return
 
     Returns:
+    -------
         Dict containing search results
 
     """
@@ -89,7 +100,8 @@ async def read_memory_graph() -> dict[str, Any]:
     """
     Read the entire memory graph.
 
-    Returns:
+    Returns
+    -------
         Dict containing the complete graph structure
 
     """
@@ -114,9 +126,11 @@ async def create_memory_entities(entities: list[dict[str, Any]]) -> dict[str, An
     Create new entities in the memory system.
 
     Args:
+    ----
         entities: List of entities to create, each with name, entityType, and observations
 
     Returns:
+    -------
         Dict containing the result of the operation
 
     """
@@ -141,9 +155,11 @@ async def create_memory_relations(relations: list[dict[str, Any]]) -> dict[str, 
     Create new relations between entities in the memory system.
 
     Args:
+    ----
         relations: List of relations to create, each with from, to, and relationType
 
     Returns:
+    -------
         Dict containing the result of the operation
 
     """
@@ -168,9 +184,11 @@ async def add_memory_observations(observations: list[dict[str, Any]]) -> dict[st
     Add new observations to existing entities in the memory system.
 
     Args:
+    ----
         observations: List of observations to add, each with entityName and contents
 
     Returns:
+    -------
         Dict containing the result of the operation
 
     """
@@ -195,9 +213,11 @@ async def delete_memory_entities(entity_names: list[str]) -> dict[str, Any]:
     Delete entities from the memory system.
 
     Args:
+    ----
         entity_names: List of entity names to delete
 
     Returns:
+    -------
         Dict containing the result of the operation
 
     """
@@ -223,7 +243,8 @@ def get_memory_tools() -> list[BaseTool]:
     """
     Get all memory tools.
 
-    Returns:
+    Returns
+    -------
         List of memory tools
 
     """

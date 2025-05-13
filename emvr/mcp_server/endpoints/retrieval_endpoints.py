@@ -20,6 +20,7 @@ async def register_retrieval_endpoints(mcp_server: MCPServer) -> None:
     Register retrieval endpoints with the MCP server.
 
     Args:
+    ----
         mcp_server: MCP server instance
 
     """
@@ -91,11 +92,13 @@ async def hybrid_search(
     Perform hybrid search across vector and graph stores.
 
     Args:
+    ----
         query: Search query string
         top_k: Number of results to return
         filters: Optional filters to apply to the search
 
     Returns:
+    -------
         Dictionary with search results
 
     """
@@ -119,11 +122,13 @@ async def vector_search(
     Perform vector search against the vector store.
 
     Args:
+    ----
         query: Search query string
         top_k: Number of results to return
         filters: Optional filters to apply to the search
 
     Returns:
+    -------
         Dictionary with search results
 
     """
@@ -148,11 +153,13 @@ async def graph_search(
     Perform graph search against the knowledge graph.
 
     Args:
+    ----
         query: Search query string
         top_k: Number of results to return
         filters: Optional filters to apply to the search
 
     Returns:
+    -------
         Dictionary with search results
 
     """
@@ -177,11 +184,13 @@ async def enrich_context(
     Enrich context with retrieved information.
 
     Args:
+    ----
         query: Query string
         context: Optional existing context to enrich
         top_k: Number of results to include
 
     Returns:
+    -------
         Dictionary with enriched context
 
     """

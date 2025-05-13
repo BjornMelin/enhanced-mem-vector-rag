@@ -34,7 +34,11 @@ class MemoryInterface(ABC):
         """Create multiple new relations between entities in the knowledge graph."""
 
     @abstractmethod
-    async def add_observations(self, entity_name: str, observations: list[str]) -> dict[str, Any]:
+    async def add_observations(
+        self,
+        entity_name: str,
+        observations: list[str],
+    ) -> dict[str, Any]:
         """Add new observations to an existing entity in the knowledge graph."""
 
     @abstractmethod

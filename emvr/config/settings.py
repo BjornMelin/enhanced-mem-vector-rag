@@ -138,7 +138,8 @@ def get_settings() -> Settings:
     """
     Get settings from environment variables with caching.
 
-    Returns:
+    Returns
+    -------
         Settings: Validated settings
 
     """

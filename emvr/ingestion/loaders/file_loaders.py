@@ -61,10 +61,12 @@ class FileLoader:
         Load a single file.
 
         Args:
+        ----
             file_path: Path to the file
             metadata: Optional metadata for the document
 
         Returns:
+        -------
             List[Dict]: List of document dictionaries with "text" and "metadata"
 
         """
@@ -93,7 +95,7 @@ class FileLoader:
                     "file_name": os.path.basename(file_path),
                     "file_type": os.path.splitext(file_path)[1][1:],
                     "file_size": os.path.getsize(file_path),
-                }
+                },
             )
 
             # Return as a list of documents (single document in this case)
@@ -101,7 +103,7 @@ class FileLoader:
                 {
                     "text": content,
                     "metadata": doc_metadata,
-                }
+                },
             ]
 
             # TODO: Implement with LlamaIndex SimpleDirectoryReader
@@ -136,6 +138,7 @@ class FileLoader:
         Load all files from a directory.
 
         Args:
+        ----
             directory_path: Path to the directory
             recursive: Whether to search subdirectories
             metadata: Optional metadata for all documents
@@ -143,6 +146,7 @@ class FileLoader:
             file_extensions: List of file extensions to include
 
         Returns:
+        -------
             List[Dict]: List of document dictionaries with "text" and "metadata"
 
         """
@@ -175,7 +179,9 @@ class FileLoader:
                         # Check file extension if specified
                         if file_extensions:
                             ext = os.path.splitext(item)[1][1:].lower()
-                            if ext not in [e.lower().lstrip(".") for e in file_extensions]:
+                            if ext not in [
+                                e.lower().lstrip(".") for e in file_extensions
+                            ]:
                                 continue
                         files.append(item_path)
                     elif os.path.isdir(item_path) and recursive:

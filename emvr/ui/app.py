@@ -25,23 +25,28 @@ try:
 except ImportError:
     # Use a mock if not available
     from unittest.mock import MagicMock
+
     ChatOpenAI = MagicMock
 
 # Import our components
 from emvr.config import get_settings
+
 # Use try/except to handle missing dependencies during development
 try:
     from emvr.agents.orchestration import initialize_orchestration
     from emvr.ingestion.pipeline import ingestion_pipeline
     from emvr.memory.memory_manager import memory_manager
-    from emvr.retrievers.retrieval_pipeline import retrieval_pipeline
+    from emvr.retrieval.pipeline import retrieval_pipeline
 except ImportError:
     # Mock these components if they're not available
     from unittest.mock import AsyncMock, MagicMock
+
     initialize_orchestration = AsyncMock(return_value=MagicMock())
     ingestion_pipeline = MagicMock()
     ingestion_pipeline.initialize = AsyncMock()
-    ingestion_pipeline.ingest_file = AsyncMock(return_value={"status": "success", "chunks": 5})
+    ingestion_pipeline.ingest_file = AsyncMock(
+        return_value={"status": "success", "chunks": 5},
+    )
     memory_manager = MagicMock()
     memory_manager.initialize = AsyncMock()
     memory_manager.close = MagicMock()
@@ -75,6 +80,7 @@ async def setup() -> None:
         except Exception as e:
             logger.warning(f"Error getting settings: {e}. Using defaults.")
             from types import SimpleNamespace
+
             settings = SimpleNamespace(openai_model="gpt-3.5-turbo")
 
         # Initialize memory manager with fallback
@@ -107,16 +113,27 @@ async def setup() -> None:
         except Exception as e:
             logger.warning(f"Error initializing LLM: {e}. Using mock.")
             from unittest.mock import MagicMock
+
             llm = MagicMock()
         cl.user_session.set("llm", llm)
 
         # Register with playground
         actions = [
-            cl.Action(name="search", label="🔍 Search", description="Search for information"),
             cl.Action(
-                name="ingest", label="📤 Ingest", description="Add information to the system"
+                name="search",
+                label="🔍 Search",
+                description="Search for information",
             ),
-            cl.Action(name="analyze", label="🔬 Analyze", description="Analyze information"),
+            cl.Action(
+                name="ingest",
+                label="📤 Ingest",
+                description="Add information to the system",
+            ),
+            cl.Action(
+                name="analyze",
+                label="🔬 Analyze",
+                description="Analyze information",
+            ),
         ]
 
         cl.init_chat(
@@ -132,17 +149,23 @@ async def setup() -> None:
             # Use mock orchestrator in development mode
             logger.info("Development mode: Using mock orchestrator")
             from unittest.mock import AsyncMock, MagicMock
-            
+
             orchestrator = MagicMock()
-            orchestrator.run = AsyncMock(return_value={
-                "response": "I'm a mock orchestrator in development mode. How can I help you?",
-                "workflow_trace": {
-                    "plan": {"steps": ["Mock planning step 1", "Mock planning step 2"]},
-                    "context": [{"content": "Mock retrieved content for development mode"}],
-                    "execution_result": "Mock execution result in development mode",
-                    "reflection": "Mock reflection on the process (development mode)"
-                }
-            })
+            orchestrator.run = AsyncMock(
+                return_value={
+                    "response": "I'm a mock orchestrator in development mode. How can I help you?",
+                    "workflow_trace": {
+                        "plan": {
+                            "steps": ["Mock planning step 1", "Mock planning step 2"],
+                        },
+                        "context": [
+                            {"content": "Mock retrieved content for development mode"},
+                        ],
+                        "execution_result": "Mock execution result in development mode",
+                        "reflection": "Mock reflection on the process (development mode)",
+                    },
+                },
+            )
             orchestrator.shutdown = AsyncMock()
             logger.info("Mock orchestrator created for development")
         else:
@@ -154,18 +177,21 @@ async def setup() -> None:
                 logger.error(f"Failed to initialize orchestrator: {e}")
                 # Fallback to mock in production
                 from unittest.mock import AsyncMock, MagicMock
+
                 orchestrator = MagicMock()
-                orchestrator.run = AsyncMock(return_value={
-                    "response": "I'm a fallback orchestrator. The main system is currently unavailable, but I'll do my best to help.",
-                    "workflow_trace": {
-                        "plan": {"steps": ["Emergency fallback step"]},
-                        "context": [{"content": "Fallback content"}],
-                        "execution_result": "Fallback execution",
-                        "reflection": "System is using fallback mode"
-                    }
-                })
+                orchestrator.run = AsyncMock(
+                    return_value={
+                        "response": "I'm a fallback orchestrator. The main system is currently unavailable, but I'll do my best to help.",
+                        "workflow_trace": {
+                            "plan": {"steps": ["Emergency fallback step"]},
+                            "context": [{"content": "Fallback content"}],
+                            "execution_result": "Fallback execution",
+                            "reflection": "System is using fallback mode",
+                        },
+                    },
+                )
                 orchestrator.shutdown = AsyncMock()
-                
+
         # Store in session
         cl.user_session.set("orchestrator", orchestrator)
 
@@ -178,8 +204,10 @@ async def setup() -> None:
                 "How can I assist you today?"
             )
         else:
-            welcome_message = "👋 Welcome to Enhanced Mem-Vector RAG! How can I assist you today?"
-            
+            welcome_message = (
+                "👋 Welcome to Enhanced Mem-Vector RAG! How can I assist you today?"
+            )
+
         await cl.Message(
             content=welcome_message,
             author="EMVR System",
@@ -202,6 +230,7 @@ async def on_message(message: cl.Message) -> None:
     Process user messages.
 
     Args:
+    ----
         message: The user message
 
     """
@@ -213,16 +242,19 @@ async def on_message(message: cl.Message) -> None:
             logger.warning("Orchestrator not found in session, creating mock")
             # Create a mock orchestrator for development
             from unittest.mock import AsyncMock, MagicMock
+
             mock_orchestrator = MagicMock()
-            mock_orchestrator.run = AsyncMock(return_value={
-                "response": f"Mock response to: {message.content}",
-                "workflow_trace": {
-                    "plan": {"steps": ["Mock planning step"]},
-                    "context": [{"content": "Mock retrieved document"}],
-                    "execution_result": "Mock execution",
-                    "reflection": "Mock reflection on the process"
-                }
-            })
+            mock_orchestrator.run = AsyncMock(
+                return_value={
+                    "response": f"Mock response to: {message.content}",
+                    "workflow_trace": {
+                        "plan": {"steps": ["Mock planning step"]},
+                        "context": [{"content": "Mock retrieved document"}],
+                        "execution_result": "Mock execution",
+                        "reflection": "Mock reflection on the process",
+                    },
+                },
+            )
             mock_orchestrator.shutdown = AsyncMock()
             orchestrator = mock_orchestrator
             cl.user_session.set("orchestrator", orchestrator)
@@ -243,9 +275,12 @@ async def on_message(message: cl.Message) -> None:
                 results = await orchestrator.run(message.content)
                 # Clear the thinking message
                 await content_stream.clear()
-                
+
                 # Show the agent response
-                response = results.get("response", "I don't have a response at this time.")
+                response = results.get(
+                    "response",
+                    "I don't have a response at this time.",
+                )
                 await content_stream.append(response)
             except Exception as e:
                 # Mock response for development if the orchestrator fails
@@ -253,9 +288,9 @@ async def on_message(message: cl.Message) -> None:
                 await content_stream.clear()
                 await content_stream.append(
                     f"I've processed your query: '{message.content}'"
-                    f"\n\nThis is a mock response since the orchestrator is not fully implemented yet."
+                    f"\n\nThis is a mock response since the orchestrator is not fully implemented yet.",
                 )
-                
+
                 # Create mock results for development
                 results = {
                     "response": f"Mock response for: {message.content}",
@@ -263,8 +298,8 @@ async def on_message(message: cl.Message) -> None:
                         "plan": {"steps": ["Mock step 1", "Mock step 2"]},
                         "context": [{"content": "Mock document content"}],
                         "execution_result": "Mock execution result",
-                        "reflection": "Mock reflection"
-                    }
+                        "reflection": "Mock reflection",
+                    },
                 }
 
             # If there's a workflow trace, add it to the message steps
@@ -288,7 +323,7 @@ async def on_message(message: cl.Message) -> None:
                         [
                             f"Document {i + 1}:\n{doc.get('content', '')}"
                             for i, doc in enumerate(trace.get("context", []))
-                        ]
+                        ],
                     )
                     steps.append(
                         cl.Step(
@@ -336,6 +371,7 @@ async def on_file(file: FileDict) -> None:
     Process uploaded files.
 
     Args:
+    ----
         file: The uploaded file
 
     """
@@ -348,13 +384,15 @@ async def on_file(file: FileDict) -> None:
                 # Create mock pipeline in development mode
                 logger.warning("Ingestion pipeline not found in session, creating mock")
                 from unittest.mock import AsyncMock, MagicMock
-                
+
                 pipeline = MagicMock()
-                pipeline.ingest_file = AsyncMock(return_value={
-                    "status": "success",
-                    "chunks": 7,
-                    "message": "Mock file ingestion success"
-                })
+                pipeline.ingest_file = AsyncMock(
+                    return_value={
+                        "status": "success",
+                        "chunks": 7,
+                        "message": "Mock file ingestion success",
+                    },
+                )
                 cl.user_session.set("ingestion_pipeline", pipeline)
                 logger.info("Created mock ingestion pipeline for development")
             else:
@@ -377,14 +415,17 @@ async def on_file(file: FileDict) -> None:
 
             # Ingest the file
             try:
-                result = await pipeline.ingest_file(file_path, metadata={"source": file_name})
+                result = await pipeline.ingest_file(
+                    file_path,
+                    metadata={"source": file_name},
+                )
             except Exception as e:
                 logger.warning(f"Pipeline error: {e}. Using mock response.")
                 # Create mock result for development
                 result = {
                     "status": "success",
                     "chunks": 5,
-                    "message": "Mock ingestion success"
+                    "message": "Mock ingestion success",
                 }
 
             # Show the ingestion result
@@ -418,6 +459,7 @@ async def on_search(action) -> None:
     Handle search action.
 
     Args:
+    ----
         action: The action
 
     """
@@ -434,6 +476,7 @@ async def on_ingest(action) -> None:
     Handle ingest action.
 
     Args:
+    ----
         action: The action
 
     """
@@ -450,6 +493,7 @@ async def on_analyze(action) -> None:
     Handle analyze action.
 
     Args:
+    ----
         action: The action
 
     """
@@ -469,6 +513,7 @@ async def on_settings_update(settings: dict[str, Any]) -> None:
     Handle settings updates.
 
     Args:
+    ----
         settings: The new settings
 
     """

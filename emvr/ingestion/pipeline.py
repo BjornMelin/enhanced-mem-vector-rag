@@ -83,10 +83,12 @@ class IngestionPipeline:
         Split text into chunks.
 
         Args:
+        ----
             text: Text to split
             metadata: Optional metadata for the chunks
 
         Returns:
+        -------
             List[Dict]: List of chunk dictionaries with "text" and "metadata"
 
         """
@@ -122,11 +124,13 @@ class IngestionPipeline:
         Ingest raw text into the memory system.
 
         Args:
+        ----
             text: Text to ingest
             metadata: Optional metadata for the text
             source_name: Optional source name for the text
 
         Returns:
+        -------
             Dict: Ingestion result
 
         """
@@ -145,7 +149,7 @@ class IngestionPipeline:
                     "source": source_id,
                     "source_type": "text",
                     "ingestion_time": datetime.now(UTC).isoformat(),
-                }
+                },
             )
 
             # Split text into chunks
@@ -160,7 +164,7 @@ class IngestionPipeline:
                     {
                         "chunk_index": i,
                         "chunk_count": len(chunks),
-                    }
+                    },
                 )
 
                 # Generate embedding
@@ -180,7 +184,7 @@ class IngestionPipeline:
                     {
                         "mem0_id": mem0_id,
                         "metadata": chunk_metadata,
-                    }
+                    },
                 )
 
             # Create an entity in the graph for this document
@@ -192,10 +196,10 @@ class IngestionPipeline:
                         "name": entity_name,
                         "entityType": "Document",
                         "observations": [
-                            f"Text content with {len(chunks)} chunks. First 100 chars: {text[:100]}..."
+                            f"Text content with {len(chunks)} chunks. First 100 chars: {text[:100]}...",
                         ],
-                    }
-                ]
+                    },
+                ],
             )
 
             logger.info(f"Successfully ingested text as '{entity_name}'")
@@ -224,10 +228,12 @@ class IngestionPipeline:
         Ingest a file into the memory system.
 
         Args:
+        ----
             file_path: Path to the file
             metadata: Optional metadata for the file
 
         Returns:
+        -------
             Dict: Ingestion result
 
         """
@@ -281,6 +287,7 @@ class IngestionPipeline:
         Ingest all files from a directory.
 
         Args:
+        ----
             directory_path: Path to the directory
             recursive: Whether to search subdirectories
             metadata: Optional metadata for all documents
@@ -288,6 +295,7 @@ class IngestionPipeline:
             file_extensions: List of file extensions to include
 
         Returns:
+        -------
             Dict: Ingestion result
 
         """
@@ -344,10 +352,12 @@ class IngestionPipeline:
         Ingest content from a URL.
 
         Args:
+        ----
             url: The URL to ingest
             metadata: Optional metadata for the URL
 
         Returns:
+        -------
             Dict: Ingestion result
 
         """

@@ -19,6 +19,7 @@ class MemoryManager(MemoryInterface):
         Initialize the memory manager.
 
         Args:
+        ----
             vector_store: Vector store for semantic memory
             graph_store: Graph store for structured memory
 
@@ -26,31 +27,31 @@ class MemoryManager(MemoryInterface):
         self.vector_store = vector_store or QdrantMemoryStore()
         self.graph_store = graph_store or Neo4jMemoryStore()
         self._initialized = False
-        
+
     async def initialize(self) -> None:
         """Initialize vector and graph stores."""
         if self._initialized:
             return
-            
+
         # Initialize vector store
         # In a real implementation, this would properly initialize the vector store
-        
+
         # Initialize graph store
         # In a real implementation, this would properly initialize the graph store
-        
+
         self._initialized = True
-        
+
     def close(self) -> None:
         """Close connections and clean up resources."""
         if not self._initialized:
             return
-            
+
         # Close vector store connections
         # In a real implementation, this would properly close vector store connections
-        
+
         # Close graph store connections
         # In a real implementation, this would properly close graph store connections
-        
+
         self._initialized = False
 
     async def create_entities(self, entities: list[Entity]) -> dict[str, Any]:
@@ -58,9 +59,11 @@ class MemoryManager(MemoryInterface):
         Create multiple new entities in the knowledge graph.
 
         Args:
+        ----
             entities: List of entities to create
 
         Returns:
+        -------
             Dictionary with created entities information
 
         """
@@ -83,9 +86,11 @@ class MemoryManager(MemoryInterface):
         Create multiple new relations between entities in the knowledge graph.
 
         Args:
+        ----
             relations: List of relations to create
 
         Returns:
+        -------
             Dictionary with created relations information
 
         """
@@ -109,10 +114,12 @@ class MemoryManager(MemoryInterface):
         Add new observations to an existing entity in the knowledge graph.
 
         Args:
+        ----
             entity_name: Name of the entity
             observations: List of observation texts
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -123,9 +130,11 @@ class MemoryManager(MemoryInterface):
         Delete multiple entities and their associated relations from the knowledge graph.
 
         Args:
+        ----
             entity_names: List of entity names to delete
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -140,10 +149,12 @@ class MemoryManager(MemoryInterface):
         Delete specific observations from an entity in the knowledge graph.
 
         Args:
+        ----
             entity_name: Name of the entity
             observations: List of observation texts to delete
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -154,9 +165,11 @@ class MemoryManager(MemoryInterface):
         Delete multiple relations from the knowledge graph.
 
         Args:
+        ----
             relations: List of relations to delete
 
         Returns:
+        -------
             Dictionary with operation result
 
         """
@@ -175,7 +188,8 @@ class MemoryManager(MemoryInterface):
         """
         Read the entire knowledge graph.
 
-        Returns:
+        Returns
+        -------
             Dictionary with entities and relations
 
         """
@@ -186,9 +200,11 @@ class MemoryManager(MemoryInterface):
         Search for nodes in the knowledge graph based on a query.
 
         Args:
+        ----
             query: Search query string
 
         Returns:
+        -------
             Dictionary with matching entities
 
         """
@@ -199,9 +215,11 @@ class MemoryManager(MemoryInterface):
         Open specific nodes in the knowledge graph by their names.
 
         Args:
+        ----
             names: List of entity names
 
         Returns:
+        -------
             Dictionary with matching entities
 
         """
@@ -217,11 +235,13 @@ class MemoryManager(MemoryInterface):
         Perform hybrid search across vector and graph stores.
 
         Args:
+        ----
             query: Search query string
             top_k: Number of results to return
             filters: Optional filters to apply to the search
 
         Returns:
+        -------
             Dictionary with search results
 
         """

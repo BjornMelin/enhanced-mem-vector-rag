@@ -33,7 +33,10 @@ def load_env() -> dict[str, str]:
 def generate_token(user_id: str, expiry_days: int = 30) -> str:
     """Generate a JWT token for the specified user."""
     env_vars = load_env()
-    jwt_secret = env_vars.get("JWT_SECRET") or os.environ.get("JWT_SECRET", "your-jwt-secret-key")
+    jwt_secret = env_vars.get("JWT_SECRET") or os.environ.get(
+        "JWT_SECRET",
+        "your-jwt-secret-key",
+    )
 
     # Check if user exists in RBAC config
     rbac_path = Path(__file__).parent.parent / "security" / "rbac.json"
@@ -59,9 +62,16 @@ def generate_token(user_id: str, expiry_days: int = 30) -> str:
 
 def main() -> None:
     """Parse arguments and generate token."""
-    parser = argparse.ArgumentParser(description="Generate JWT token for EMVR authentication")
+    parser = argparse.ArgumentParser(
+        description="Generate JWT token for EMVR authentication",
+    )
     parser.add_argument("user_id", help="User ID to generate token for")
-    parser.add_argument("--expiry", type=int, default=30, help="Token expiry in days (default: 30)")
+    parser.add_argument(
+        "--expiry",
+        type=int,
+        default=30,
+        help="Token expiry in days (default: 30)",
+    )
     parser.add_argument("--output", help="Output file path (optional)")
 
     args = parser.parse_args()

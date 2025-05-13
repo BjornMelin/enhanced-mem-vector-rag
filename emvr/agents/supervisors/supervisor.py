@@ -105,6 +105,7 @@ class SupervisorAgent(BaseAgent):
         Initialize the supervisor agent.
 
         Args:
+        ----
             llm: Language model to use
             worker_agents: Worker agents to delegate tasks to
             additional_tools: Additional tools for the supervisor
@@ -197,9 +198,11 @@ class SupervisorAgent(BaseAgent):
         Planning step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -212,10 +215,10 @@ class SupervisorAgent(BaseAgent):
                             "You are the Planning Agent. Your job is to create a plan for solving "
                             "the user's request. Break down the task into steps, considering what "
                             "information you need and what actions to take."
-                        )
+                        ),
                     ),
                     HumanMessage(content=state.get("input", "")),
-                ]
+                ],
             )
 
             # Get the plan
@@ -243,9 +246,11 @@ class SupervisorAgent(BaseAgent):
         Retrieving step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -262,7 +267,7 @@ class SupervisorAgent(BaseAgent):
                         "limit": 10,
                         "rerank": True,
                     },
-                }
+                },
             )
 
             # Update state
@@ -285,9 +290,11 @@ class SupervisorAgent(BaseAgent):
         Analyzing step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -297,7 +304,7 @@ class SupervisorAgent(BaseAgent):
                 [
                     f"Document {i + 1}:\n{doc.get('content', '')}"
                     for i, doc in enumerate(state.get("context", []))
-                ]
+                ],
             )
 
             # Create analyzing prompt
@@ -311,16 +318,16 @@ class SupervisorAgent(BaseAgent):
                             "2. We have enough information and need to execute the plan (respond with 'execute')\n"
                             "3. We have enough information to respond directly (respond with 'respond')\n"
                             "Provide your reasoning and then state your decision as a single word."
-                        )
+                        ),
                     ),
                     HumanMessage(
                         content=(
                             f"User query: {state.get('input', '')}\n\n"
                             f"Plan: {state.get('plan', {}).get('steps', [])}\n\n"
                             f"Retrieved context: {context_str}"
-                        )
+                        ),
                     ),
-                ]
+                ],
             )
 
             # Get the analysis
@@ -344,9 +351,11 @@ class SupervisorAgent(BaseAgent):
         Condition function for analyzing step.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Next state
 
         """
@@ -363,9 +372,11 @@ class SupervisorAgent(BaseAgent):
         Ingesting step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -378,16 +389,16 @@ class SupervisorAgent(BaseAgent):
                             "You are the Ingestion Agent. Your job is to determine what "
                             "information needs to be ingested to answer the user's query. "
                             "This could be a URL, a file, or text provided by the user."
-                        )
+                        ),
                     ),
                     HumanMessage(
                         content=(
                             f"User query: {state.get('input', '')}\n\n"
                             f"Plan: {state.get('plan', {}).get('steps', [])}\n\n"
                             f"Analysis: {state.get('analysis', '')}"
-                        )
+                        ),
                     ),
-                ]
+                ],
             )
 
             # Get the ingestion plan
@@ -417,9 +428,11 @@ class SupervisorAgent(BaseAgent):
         Executing step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -429,7 +442,7 @@ class SupervisorAgent(BaseAgent):
                 [
                     f"Document {i + 1}:\n{doc.get('content', '')}"
                     for i, doc in enumerate(state.get("context", []))
-                ]
+                ],
             )
 
             # Create execution prompt
@@ -440,16 +453,16 @@ class SupervisorAgent(BaseAgent):
                             "You are the Execution Agent. Your job is to execute the plan "
                             "using the retrieved context. Think step-by-step and provide "
                             "a detailed solution to the user's query."
-                        )
+                        ),
                     ),
                     HumanMessage(
                         content=(
                             f"User query: {state.get('input', '')}\n\n"
                             f"Plan: {state.get('plan', {}).get('steps', [])}\n\n"
                             f"Retrieved context: {context_str}"
-                        )
+                        ),
                     ),
-                ]
+                ],
             )
 
             # Execute the plan
@@ -475,9 +488,11 @@ class SupervisorAgent(BaseAgent):
         Reflecting step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -490,16 +505,16 @@ class SupervisorAgent(BaseAgent):
                             "You are the Reflection Agent. Your job is to reflect on the execution "
                             "of the plan and identify any gaps or areas for improvement. Provide "
                             "an objective assessment of the solution quality."
-                        )
+                        ),
                     ),
                     HumanMessage(
                         content=(
                             f"User query: {state.get('input', '')}\n\n"
                             f"Plan: {state.get('plan', {}).get('steps', [])}\n\n"
                             f"Execution result: {state.get('execution_result', '')}"
-                        )
+                        ),
                     ),
-                ]
+                ],
             )
 
             # Get the reflection
@@ -525,9 +540,11 @@ class SupervisorAgent(BaseAgent):
         Responding step of the workflow.
 
         Args:
+        ----
             state: Current state
 
         Returns:
+        -------
             Updated state
 
         """
@@ -544,16 +561,16 @@ class SupervisorAgent(BaseAgent):
                             "You are the Response Agent. Your job is to create a clear, concise, "
                             "and helpful response to the user's query. Use the execution result "
                             "and reflection to craft your response. Be direct and to the point."
-                        )
+                        ),
                     ),
                     HumanMessage(
                         content=(
                             f"User query: {state.get('input', '')}\n\n"
                             f"Execution result: {execution_result}\n\n"
                             f"Reflection: {reflection}"
-                        )
+                        ),
                     ),
-                ]
+                ],
             )
 
             # Get the final response
@@ -580,10 +597,12 @@ class SupervisorAgent(BaseAgent):
         Run the agent on the given input.
 
         Args:
+        ----
             input_text: Input text to process
             kwargs: Additional arguments
 
         Returns:
+        -------
             Dict containing the agent's response and any additional information
 
         """
@@ -594,7 +613,7 @@ class SupervisorAgent(BaseAgent):
                     "input": input_text,
                     "messages": [],
                     "current_state": AgentState.PLANNING,
-                }
+                },
             )
 
             # Execute the workflow
@@ -603,7 +622,8 @@ class SupervisorAgent(BaseAgent):
             # Return the result
             return {
                 "response": result.get(
-                    "final_response", "I'm sorry, I couldn't generate a response."
+                    "final_response",
+                    "I'm sorry, I couldn't generate a response.",
                 ),
                 "workflow_trace": {
                     "plan": result.get("plan"),

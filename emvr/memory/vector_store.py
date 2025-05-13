@@ -1,9 +1,8 @@
 """Vector store implementation using Qdrant and Mem0."""
 
 import os
-from typing import Any, List, Dict
+from typing import Any
 
-import qdrant_client
 from dotenv import load_dotenv
 
 # Temporarily comment out LlamaIndex imports
@@ -27,6 +26,7 @@ class QdrantMemoryStore:
         Initialize the Qdrant memory store.
 
         Args:
+        ----
             collection_name: Name of the Qdrant collection
             url: URL of the Qdrant server (defaults to env var QDRANT_URL)
             api_key: API key for the Qdrant server (defaults to env var QDRANT_API_KEY)
@@ -62,11 +62,13 @@ class QdrantMemoryStore:
         Perform similarity search against the vector store.
 
         Args:
+        ----
             query: The query text
             top_k: Number of results to return
             filters: Optional filters to apply to the search
 
         Returns:
+        -------
             List of matching documents with scores
 
         """
@@ -82,7 +84,7 @@ class QdrantMemoryStore:
                         "relevance": 0.9 - (i * 0.1),
                     },
                     "score": 0.9 - (i * 0.1),
-                }
+                },
             )
 
         # In the real implementation:
@@ -119,11 +121,13 @@ class QdrantMemoryStore:
         Perform hybrid (vector + keyword) search against the vector store.
 
         Args:
+        ----
             query: The query text
             top_k: Number of results to return
             filters: Optional filters to apply to the search
 
         Returns:
+        -------
             List of matching documents with scores
 
         """
@@ -136,12 +140,13 @@ class QdrantMemoryStore:
                     "text": f"Hybrid search result {i} for query: {query}",
                     "metadata": {
                         "source": "hybrid-mock-data",
-                        "relevance": 0.95 - (i * 0.1),  # Higher scores for hybrid search
+                        "relevance": 0.95
+                        - (i * 0.1),  # Higher scores for hybrid search
                     },
                     "score": 0.95 - (i * 0.1),
-                }
+                },
             )
-            
+
         # In the real implementation:
         # # Use LlamaIndex's hybrid retriever
         # from llama_index.core import QueryBundle

@@ -38,6 +38,7 @@ class WorkerAgent(BaseAgent):
         Initialize the worker agent.
 
         Args:
+        ----
             name: Agent name
             description: Agent description
             specialty: Agent specialty (e.g., "research", "coding", "analysis")
@@ -73,10 +74,12 @@ class WorkerAgent(BaseAgent):
         Run the agent on the given input.
 
         Args:
+        ----
             input_text: Input text to process
             kwargs: Additional arguments
 
         Returns:
+        -------
             Dict containing the agent's response and any additional information
 
         """
@@ -97,14 +100,16 @@ class WorkerAgent(BaseAgent):
                     context_str += f"[{i + 1}] From {source}: {content}\n\n"
 
             # Combine context and input
-            full_input = f"{context_str}\n\nTask: {input_text}" if context_str else input_text
+            full_input = (
+                f"{context_str}\n\nTask: {input_text}" if context_str else input_text
+            )
 
             # Execute the agent
             result = await self.agent_executor.ainvoke(
                 {
                     "input": full_input,
                     "chat_history": chat_history,
-                }
+                },
             )
 
             # Return the result

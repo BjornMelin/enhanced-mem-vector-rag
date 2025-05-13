@@ -27,7 +27,22 @@ REQUEST_LATENCY = Histogram(
     "emvr_mcp_server_request_latency_seconds",
     "Request latency in seconds",
     ["method", "endpoint"],
-    buckets=(0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, 25.0, 50.0, 75.0, 100.0, float("inf")),
+    buckets=(
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        2.5,
+        5.0,
+        7.5,
+        10.0,
+        25.0,
+        50.0,
+        75.0,
+        100.0,
+        float("inf"),
+    ),
 )
 
 VECTOR_COUNT = Gauge(
@@ -96,7 +111,9 @@ def setup_metrics(app: FastAPI) -> None:
         finally:
             REQUESTS_IN_PROGRESS.labels(method=method, endpoint=path).dec()
             REQUESTS.labels(method=method, endpoint=path, status=status_code).inc()
-            REQUEST_LATENCY.labels(method=method, endpoint=path).observe(time.time() - start_time)
+            REQUEST_LATENCY.labels(method=method, endpoint=path).observe(
+                time.time() - start_time,
+            )
 
 
 def track_agent_operation(agent_type: str, operation: str) -> Callable[[F], F]:
@@ -108,12 +125,16 @@ def track_agent_operation(agent_type: str, operation: str) -> Callable[[F], F]:
             try:
                 result = await func(*args, **kwargs)
                 AGENT_OPERATIONS.labels(
-                    agent_type=agent_type, operation=operation, status="success"
+                    agent_type=agent_type,
+                    operation=operation,
+                    status="success",
                 ).inc()
                 return result
             except Exception:
                 AGENT_OPERATIONS.labels(
-                    agent_type=agent_type, operation=operation, status="failure"
+                    agent_type=agent_type,
+                    operation=operation,
+                    status="failure",
                 ).inc()
                 raise
 
@@ -146,7 +167,10 @@ def update_vector_count(collection: str, count: int) -> None:
     VECTOR_COUNT.labels(collection=collection).set(count)
 
 
-def update_graph_counts(node_counts: dict[str, int], relation_counts: dict[str, int]) -> None:
+def update_graph_counts(
+    node_counts: dict[str, int],
+    relation_counts: dict[str, int],
+) -> None:
     """Update Neo4j graph count metrics."""
     for label, count in node_counts.items():
         GRAPH_NODE_COUNT.labels(label=label).set(count)
