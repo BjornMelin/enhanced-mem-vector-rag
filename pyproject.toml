@@ -101,7 +101,7 @@ dev = [
     "ruff>=0.1.5,<0.2.0",  # Handles linting, formatting, and import sorting
     "mypy>=1.7.0,<2.0.0",
     "pre-commit>=3.5.0,<4.0.0",
-    "uv>=0.1.11,<0.2.0",
+    "uv>=0.1.11,<0.10.0",
 ]
 
 [project.urls]
