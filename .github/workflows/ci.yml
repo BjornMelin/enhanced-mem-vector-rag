@@ -115,4 +115,4 @@ jobs:
             echo "::error::No release artifacts found in dist/"
             exit 1
           fi
-          gh release create "$GITHUB_REF_NAME" "${artifacts[@]}" --generate-notes
+          gh release create "$GITHUB_REF_NAME" "${artifacts[@]}" --generate-notes --repo "$GITHUB_REPOSITORY"
