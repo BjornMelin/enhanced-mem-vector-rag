@@ -62,9 +62,6 @@ reportMissingTypeStubs = false
 [tool.pytest.ini_options]
 addopts = "--strict-config --strict-markers --cov=emvr --cov-report=term-missing --cov-fail-under=95"
 asyncio_mode = "auto"
-filterwarnings = [
-  "ignore:The default datetime adapter is deprecated as of Python 3.12.*:DeprecationWarning",
-]
 testpaths = ["tests"]
 
 [tool.coverage.run]

@@ -9,9 +9,9 @@
 
 ## Reporting
 
-GitHub private vulnerability reporting isn't enabled yet. [Issue #12](https://github.com/BjornMelin/enhanced-mem-vector-rag/issues/12) tracks that repository setting.
+Do not report vulnerabilities in public issues, discussions, or pull requests.
 
-Until the private flow is live, open a public issue that asks the maintainer to arrange a private channel. Don't include exploit details, credentials, memory database contents, or personal data.
+GitHub private vulnerability reporting isn't enabled yet. [Issue #12](https://github.com/BjornMelin/enhanced-mem-vector-rag/issues/12) is a sanitized tracking issue for enabling it; don't add vulnerability details there. Until the repository's **Security** tab offers **Report a vulnerability**, don't submit exploit details, credentials, memory database contents, or personal data through GitHub.
 
 ## Boundary
 

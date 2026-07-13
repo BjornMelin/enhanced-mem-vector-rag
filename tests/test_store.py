@@ -5,6 +5,7 @@ import sqlite3
 import subprocess
 import sys
 import time
+import warnings
 from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
@@ -513,7 +514,13 @@ def test_exhaustive_reads_do_not_skip_rows_when_expiry_changes(tmp_path: Path) -
 def test_explicit_item_ttl_slides_without_a_default_ttl(tmp_path: Path) -> None:
     database = tmp_path / "explicit-ttl.sqlite"
     with MemoryService(database) as service:
-        service.upsert(("ttl",), "explicit", record(1), ttl_minutes=10)
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "error",
+                message="The default datetime adapter is deprecated.*",
+                category=DeprecationWarning,
+            )
+            service.upsert(("ttl",), "explicit", record(1), ttl_minutes=10)
         with closing(sqlite3.connect(database)) as connection:
             connection.execute(
                 "UPDATE store SET expires_at = datetime('now', '+1 minute')"

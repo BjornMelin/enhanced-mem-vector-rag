@@ -268,7 +268,11 @@ class _SweepingSqliteStore(SqliteStore):
         queries, embedding_request = inherited
         prepared: list[tuple[str, Sequence[object]]] = []
         marker = "INSERT OR REPLACE INTO store ("
-        for query, params in queries:
+        for query, inherited_params in queries:
+            params = [
+                value.isoformat(sep=" ") if isinstance(value, datetime) else value
+                for value in inherited_params
+            ]
             if marker not in query:
                 prepared.append((query, params))
                 continue
