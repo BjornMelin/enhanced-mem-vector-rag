@@ -39,6 +39,12 @@ async def test_tool_catalog_and_schemas(tmp_path: Path) -> None:
     assert search_schema["properties"]["namespace_prefix"]["minItems"] == 1
     assert search_schema["properties"]["limit"]["minimum"] == 1
     assert search_schema["properties"]["limit"]["maximum"] == 1_000
+    ttl_schema = by_name["memory_put"].inputSchema["properties"]["ttl_minutes"]
+    assert {variant["type"] for variant in ttl_schema["anyOf"]} == {
+        "integer",
+        "number",
+        "null",
+    }
     output_schema = by_name["memory_get"].outputSchema
     assert output_schema is not None
     assert output_schema["type"] == "object"
@@ -208,6 +214,16 @@ async def test_namespace_purge_and_sweep_are_structured(tmp_path: Path) -> None:
                 "content": {},
                 "source": "test",
                 "ttl_minutes": True,
+            },
+        ),
+        (
+            "memory_put",
+            {
+                "namespace": ["x"],
+                "key": "x",
+                "content": {},
+                "source": "test",
+                "ttl_minutes": "10",
             },
         ),
     ],

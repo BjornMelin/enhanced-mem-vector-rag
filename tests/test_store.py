@@ -19,6 +19,7 @@ from langgraph.store.base import BaseStore, InvalidNamespaceError, PutOp, TTLCon
 from langgraph.store.sqlite.base import SqliteIndexConfig
 
 from emvr import MemoryRecord, MemoryService
+from emvr.store import _normalize_index  # pyright: ignore[reportPrivateUsage]
 
 OBSERVED_AT = datetime(2026, 7, 12, 18, 30, tzinfo=UTC)
 
@@ -735,6 +736,10 @@ def test_global_semantic_fields_select_only_configured_content(tmp_path: Path) -
         SqliteIndexConfig,
         {"dims": 2, "embed": embed, "fields": ["content.title"]},
     )
+    normalized = _normalize_index(index)
+    assert normalized is not None
+    assert normalized.get("fields") == ["content.title"]
+
     with MemoryService(tmp_path / "fields.sqlite", index=index) as service:
         service.upsert(
             ("notes",),

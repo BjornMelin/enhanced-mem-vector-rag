@@ -33,7 +33,16 @@ Source = Annotated[str, Field(min_length=1, max_length=2_048, pattern=r"\S")]
 EvidenceItem = Annotated[str, Field(min_length=1, max_length=8_192, pattern=r"\S")]
 Evidence = Annotated[list[EvidenceItem], Field(max_length=100)]
 Query = Annotated[str, Field(min_length=1, max_length=8_192, pattern=r"\S")]
-TTLMinutes = Annotated[float, Field(strict=True, gt=0, le=MAX_TTL_MINUTES)]
+TTLMinutes = (
+    Annotated[
+        int,
+        Field(strict=True, gt=0, le=MAX_TTL_MINUTES),
+    ]
+    | Annotated[
+        float,
+        Field(strict=True, gt=0, le=MAX_TTL_MINUTES, allow_inf_nan=False),
+    ]
+)
 ResultLimit = Annotated[int, Field(ge=1, le=1_000)]
 ResultOffset = Annotated[int, Field(ge=0, le=10_000_000)]
 

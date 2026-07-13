@@ -164,7 +164,7 @@ def _normalize_index(index: SqliteIndexConfig | None) -> SqliteIndexConfig | Non
     if index is None:
         return None
     normalized = cast(dict[str, Any], dict(index))
-    fields = normalized.pop("fields", None)
+    fields = normalized.get("fields")
     if fields is not None:
         normalized["text_fields"] = fields
     if normalized.get("distance_type", "cosine") != "cosine":
