@@ -1,7 +1,28 @@
-"""
-Enhanced Memory Vector RAG (EMVR).
+"""Enhanced Memory: strict typed records on LangGraph's native SQLite store."""
 
-A hybrid retrieval framework with advanced memory and graph capabilities.
-"""
+from emvr.models import (
+    SCHEMA_VERSION,
+    HealthReport,
+    JsonObject,
+    JsonValue,
+    MemoryEntry,
+    MemoryRecord,
+    Namespace,
+    Provenance,
+    content_digest,
+)
+from emvr.store import MemoryService, SemanticIndexDisabledError
 
-__version__ = "0.1.0"
+__all__ = [
+    "SCHEMA_VERSION",
+    "HealthReport",
+    "JsonObject",
+    "JsonValue",
+    "MemoryEntry",
+    "MemoryRecord",
+    "MemoryService",
+    "Namespace",
+    "Provenance",
+    "SemanticIndexDisabledError",
+    "content_digest",
+]
